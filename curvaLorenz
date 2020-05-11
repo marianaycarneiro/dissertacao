@@ -1,0 +1,31 @@
+#############################################################
+## Figure 3 - CURVA DE LORENZ
+##
+############################################################
+library(IC2)
+specify_decimal <- function(x, k) {format(round(x, k), nsmall=k)} ##Function to round decimals numbers
+data<-read.csv("Dados_R.CSV")
+data$T30Pop<-((data$T30)/(data$Pop))
+data$T60Pop<-((data$T60)/(data$Pop))
+data$T90Pop<-((data$T90)/(data$Pop))
+data$T120Pop<-((data$T120)/(data$Pop))
+T30Pop<-calcSGini(x=data$T30Pop,  w=data$Pop, param=2)
+T60Pop<-calcSGini(x=data$T60Pop,  w=data$Pop, param=2)
+T90Pop<-calcSGini(x=data$T90Pop,  w=data$Pop, param=2)
+T120Pop<-calcSGini(x=data$T120Pop,  w=data$Pop, param=2)
+lgnd<-c(bquote("Travel Time      Gini Index"), 
+        bquote("30 min..........................."~.(specify_decimal(T30Pop$ineq$index,3))~""),
+        bquote("60 min..........................."~.(specify_decimal(T60Pop$ineq$index,3))~""),
+        bquote("90 min..........................."~.(specify_decimal(T90Pop$ineq$index,3))~""),
+        bquote("120 min........................."~.(specify_decimal(T120Pop$ineq$index,3))~""))
+tiff("C:/Users/Vaio/Desktop/Mestrado/Dissertação/Capítulo 5 - Análise dos Resultados/Dados - Curvas de Concentração/imagensJTG/Figura3.tif", res=1000, compression = "lzw", height=3800, width=3600, units="px")
+par(ps = 11, cex = 0.80, cex.main = 0.8, mar=c(5.0,4.0,0.8,0.8), mgp=c(2.5,0.5,0), oma=c(0,0,0,0))
+curveLorenz(x=data[, "T30Pop"], , w=data[,"Pop"], col="red", lwd=1.5)
+curveLorenz(x=data[, "T60Pop"], , w=data[,"Pop"], col="orange", lwd=1.5, add=TRUE)
+curveLorenz(x=data[, "T90Pop"], , w=data[,"Pop"], col="yellow", lwd=1.5, add=TRUE)
+curveLorenz(x=data[, "T120Pop"], , w=data[,"Pop"], col="green", lwd=1.5, add=TRUE)
+legend("topleft", legend = as.expression(lgnd), cex=0.75, col=c("white","red", "orange", "yellow", "green"), lwd=c(0,1.5,1.5,1.5,1.5), lty=c(0,1,1,1,1))
+title(xlab="Population (orded by Accessibility)", ylab="Accessibility") 
+dev.off()
+############################################################
+
