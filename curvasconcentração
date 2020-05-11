@@ -1,0 +1,67 @@
+##########################################################
+## VARIABLES DESCRIPTION (Dados_R.CSV file):
+#########################################################
+## Id.....
+#############################################################
+## Figure 1 - CURVA DE CONCETRAÇÃO POR RENDA
+##
+############################################################
+library(IC2)
+specify_decimal <- function(x, k) {format(round(x, k), nsmall=k)} ##Function to round decimals numbers
+data<-read.csv("Dados_R.CSV")
+data$T30Pop<-((data$T30)/(data$Pop))
+data$T60Pop<-((data$T60)/(data$Pop))
+data$T90Pop<-((data$T90)/(data$Pop))
+data$T120Pop<-((data$T120)/(data$Pop))
+T30Pop<-calcSConc(x=data$T30Pop, y=data$Renda, w=data$Pop, param=2)
+T60Pop<-calcSConc(x=data$T60Pop, y=data$Renda, w=data$Pop, param=2)
+T90Pop<-calcSConc(x=data$T90Pop, y=data$Renda, w=data$Pop, param=2)
+T120Pop<-calcSConc(x=data$T120Pop, y=data$Renda, w=data$Pop, param=2)
+lgnd<-c(bquote("Travel Time      Concentration Index"), 
+        bquote("30 min..............................."~.(specify_decimal(T30Pop$ineq$index,3))~""),
+        bquote("60 min..............................."~.(specify_decimal(T60Pop$ineq$index,3))~""),
+        bquote("90 min..............................."~.(specify_decimal(T90Pop$ineq$index,3))~""),
+        bquote("120 min............................"~.(specify_decimal(T120Pop$ineq$index,3))~""))
+tiff("C:/Users/Vaio/Desktop/Mestrado/Dissertação/Capítulo 5 - Análise dos Resultados/Dados - Curvas de Concentração/imagensJTG/Figura1.tif", res=1000, compression = "lzw", height=3800, width=3600, units="px")
+par(ps = 11, cex = 0.80, cex.main = 0.8, mar=c(5.0,4.0,0.8,0.8), mgp=c(2.5,0.5,0), oma=c(0,0,0,0))
+curveConcent(x=data[, "T30Pop"], y=data[,"Renda"], w=data[,"Pop"], col="red", lwd=1.5)
+curveConcent(x=data[, "T60Pop"], y=data[,"Renda"], w=data[,"Pop"], col="orange", lwd=1.5, add=TRUE)
+curveConcent(x=data[, "T90Pop"], y=data[,"Renda"], w=data[,"Pop"], col="yellow", lwd=1.5, add=TRUE)
+curveConcent(x=data[, "T120Pop"], y=data[,"Renda"], w=data[,"Pop"], col="green", lwd=1.5, add=TRUE)
+legend("topleft", legend = as.expression(lgnd), cex=0.75, col=c("white","red", "orange", "yellow", "green"), lwd=c(0,1.5,1.5,1.5,1.5), lty=c(0,1,1,1,1))
+title(xlab="Population (from poorest to richest)", ylab="Accessibility") 
+dev.off()
+############################################################
+
+#############################################################
+## Figure 2 - CURVA DE CONCETRAÇÃO POR DISTÂNCIA AO CENTRO
+##
+############################################################
+
+library(IC2)
+specify_decimal <- function(x, k) {format(round(x, k), nsmall=k)} ##Function to round decimals numbers
+data<-read.csv("Dados_R.CSV")
+data$T30_Pop<-((data$T30)/(data$Pop))
+data$T60_Pop<-((data$T60)/(data$Pop))
+data$T90_Pop<-((data$T90)/(data$Pop))
+data$T120_Pop<-((data$T120)/(data$Pop))
+T30_Pop<-calcSConc(x=data$T30_Pop, y=data$DistCentroN, w=data$Pop, param=2)
+T60_Pop<-calcSConc(x=data$T60_Pop, y=data$DistCentroN, w=data$Pop, param=2)
+T90_Pop<-calcSConc(x=data$T90_Pop, y=data$DistCentroN, w=data$Pop, param=2)
+T120_Pop<-calcSConc(x=data$T120_Pop, y=data$DistCentroN, w=data$Pop, param=2)
+lgnd<-c(bquote("Travel Time      Concentration Index"), 
+        bquote("30 min................................"~.(specify_decimal(T30_Pop$ineq$index,3))~""),
+        bquote("60 min................................"~.(specify_decimal(T60_Pop$ineq$index,3))~""),
+        bquote("90 min................................"~.(specify_decimal(T90_Pop$ineq$index,3))~""),
+        bquote("120 min..............................."~.(specify_decimal(T120_Pop$ineq$index,3))~""))
+tiff("C:/Users/Vaio/Desktop/Mestrado/Dissertação/Capítulo 5 - Análise dos Resultados/Dados - Curvas de Concentração/imagensJTG/Figura2.tif", res=1000, compression = "lzw", height=3800, width=3600, units="px")
+par(ps = 11, cex = 0.80, cex.main = 0.8, mar=c(5.0,4.0,0.8,0.8), mgp=c(2.5,0.5,0), oma=c(0,0,0,0))
+curveConcent(x=data[, "T30_Pop"], y=data[,"DistCentroN"], w=data[,"Pop"], col="red", lwd=1.5)
+curveConcent(x=data[, "T60_Pop"], y=data[,"DistCentroN"], w=data[,"Pop"], col="orange", lwd=1.5, add=TRUE)
+curveConcent(x=data[, "T90_Pop"], y=data[,"DistCentroN"], w=data[,"Pop"], col="yellow", lwd=1.5, add=TRUE)
+curveConcent(x=data[, "T120_Pop"], y=data[,"DistCentroN"], w=data[,"Pop"], col="green", lwd=1.5, add=TRUE)
+legend("topleft", legend = as.expression(lgnd), cex=0.75, col=c("white","red", "orange", "yellow", "green"), lwd=c(0,1.5,1.5,1.5,1.5), lty=c(0,1,1,1,1))
+title(xlab="Population (orderd by distance to cbd)", ylab="Accessibility") 
+dev.off()
+
+
